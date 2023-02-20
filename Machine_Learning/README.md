@@ -122,3 +122,23 @@ plt.show()
 
 # Classification
 ## 1.Logistic Regression
+
+**Objective**: Find the best target function (applied sigmoid function to a linear function)
+
+h(x) = σ(θ<sup>T</sup>x)
+
+**Cost function**: Cross-entropy loss (log loss)
+
+**Learning objective**: minimize cost function
+
+```
+from sklearn.datasets import make_classification
+import numpy as np
+X, Y = make_classification(n_samples=10, n_features=4)
+
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression(random_state=123)
+clf.fit(X,Y)
+print(clf.predict(X))
+print(clf.predict_proba(X))
+```
