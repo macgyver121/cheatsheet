@@ -139,6 +139,7 @@ X, Y = make_classification(n_samples=10, n_features=4)
 from sklearn.linear_model import LogisticRegression
 clf = LogisticRegression(random_state=123)
 clf.fit(X,Y)
+print('Y:', Y)
 print('predict:',clf.predict(X))
 print('predict_prob:',clf.predict_proba(X))
 
@@ -146,5 +147,7 @@ print('predict_prob:',clf.predict_proba(X))
 print('score:',clf.score(X, Y))
 ```
 
-![image](https://user-images.githubusercontent.com/85028821/220146261-d050869b-6fc0-46f4-b660-e6cdae65e2c4.png)
+![image](https://user-images.githubusercontent.com/85028821/220159150-07ccdbd1-db8a-4ffe-8027-07ba7db2c554.png)
+
+
 
