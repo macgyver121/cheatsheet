@@ -120,6 +120,78 @@ plt.show()
 ```
 ![image](https://user-images.githubusercontent.com/85028821/216638017-16fe03be-be95-4e6b-b1f7-50aa60ee0874.png)
 
+## Overfitting
+- Underfit: Train accuracy = low , Test accuracy = low
+- Good fit: Train accuracy = high , Test accuracy = high
+- Overfit: Train accuracy = high , Test accuracy = low
+
+### Options
+- Reduce number of features
+- Regularization
+
+## Regularization: Additional term of Lambda in the cost function 
+- Ridge regression: reduce parameters close to zero (but not zero)
+- Lasso regression: reduce the number of features
+- Elastic Net: mix of both Ridge and Lasso
+
+Defualt Polynomial Regression
+```
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import PolynomialFeatures
+
+X = np.array([[10, 15, 20, 25, 30]]).T
+y = np.array([[10, 30, 50, 51, 52]]).T
+
+poly_reg=PolynomialFeatures(degree=4)
+#print("X ",X)
+
+X_poly = poly_reg.fit_transform(X)
+print("X_poly ", X_poly)
+
+lin_reg4=LinearRegression()
+lin_reg4.fit(X_poly,y)
+print("Coef ", lin_reg4.coef_)
+print("Intercept ", lin_reg4.intercept_)
+print("R^2 ", lin_reg4.score(X_poly,y))
+
+y_pred = lin_reg4.predict(X_poly)
+print("MSE polynomial = ", mean_squared_error(y,y_pred))
+
+plt.scatter(X,y)
+plt.plot(X,y_pred,'g-',label="Polynomial regression")
+plt.legend() 
+plt.show()
+```
+![image](https://user-images.githubusercontent.com/85028821/221398852-392bec8f-88f3-4bd1-8706-832c60a80f3e.png)
+
+Polynomial Regression Add Ridge
+```
+from sklearn.linear_model import Ridge
+
+#poly_reg=PolynomialFeatures(degree=4)
+
+#X_poly = poly_reg.fit_transform(X)
+
+clf = Ridge(alpha=100) # lambda in lecture, alpha in sklearn
+clf.fit(X_poly, y)
+
+print("Coef ", clf.coef_)
+print("Intercept ", clf.intercept_)
+print("R^2 ", clf.score(X_poly,y))
+
+y_pred = clf.predict(X_poly)
+print("MSE polynomial = ", mean_squared_error(y,y_pred))
+
+plt.scatter(X,y)
+plt.plot(X,y_pred,'b-',label="Polynomial ridge regression")
+plt.legend() 
+plt.show()
+```
+![image](https://user-images.githubusercontent.com/85028821/221398861-ab19753e-290a-4f01-94b7-e3a292dbb5d9.png)
+
 # Classification
 ## 1.Logistic Regression
 
