@@ -463,3 +463,33 @@ answer = knn.predict(test)
 print(answer)
 ```
 > [1.]
+
+## 3.Decision Tree
+- **Classification And Regression Tree (CART)** : use Gini index
+- **Iterative Dichotomiser 3 (ID3)** : use information gain (entropy)
+
+### Issue: Overfitting
+### Solution
+- Limit the number of iterations of ID3
+- Pruning
+- Random forests 
+
+```
+# perform training 
+from sklearn.tree import DecisionTreeClassifier  # import the classifier
+classifier = DecisionTreeClassifier(criterion='gini', max_depth=3)
+classifier.fit(X, y)
+
+#!pip install pip install pydotplus
+from sklearn.tree import export_graphviz
+from six import StringIO
+from IPython.display import Image
+import pydotplus
+dot_data = StringIO()
+export_graphviz(classifier, out_file=dot_data, filled=True, rounded=True, special_characters=True,feature_names = feature_cols ,class_names=['no','yes'])
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+graph.write_png('playtennis.png')
+Image(graph.create_png())
+```
+![image](https://user-images.githubusercontent.com/85028821/221401097-e6a7003b-6984-46ef-9ed6-a9e36a8302fe.png)
+
