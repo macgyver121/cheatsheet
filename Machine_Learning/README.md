@@ -415,5 +415,5 @@ To classify a new input vector x, examine the k-closet trainging data points to 
 
 **Issues and Remedies**
 - Ties
--- for binary classification: choose K odd
--- for multi-class classification: decrease K until the tie is broken 
+  - for binary classification: choose K odd
+  - for multi-class classification: decrease K until the tie is broken 
