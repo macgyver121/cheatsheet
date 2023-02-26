@@ -413,7 +413,53 @@ Assumption: Similar Inputs have similar outputs
 
 To classify a new input vector x, examine the k-closet trainging data points to x and assign the object to the most frequently occurring class
 
+How to choose K: Larger K may lead to better performance use Rule of thumb ( k < sqrt(n) )
+
 **Issues and Remedies**
 - Ties
   - for binary classification: choose K odd
   - for multi-class classification: decrease K until the tie is broken 
+- Attributes have larger ranges: Normalize scale
+- Irrelevant/ correlated attributes: eliminate some attributes
+- Expensive at test time: use subset of dimensions (features selection)
+
+```
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()  # for plot styling
+import numpy as np
+
+dataset = np.array([[1,2,0],
+                    [1,2.5,0],
+                    [7,2,1],
+                    [3,2.3,1],
+                    [4,2.1,1]])
+
+test = np.array([[2,2]])
+
+from sklearn.neighbors import NearestNeighbors
+neigh = NearestNeighbors(n_neighbors=3)
+neigh.fit(dataset[:, :2], dataset[:,2])
+
+result = neigh.kneighbors(test)
+print("result = ",result) #distance and index
+
+#Plot all points
+plt.scatter(dataset[:, 0], dataset[:, 1],c = dataset[:,2], s=30, cmap='viridis')
+#Plot neighbors
+plt.scatter(dataset[result[1][0:], 0], dataset[result[1][0:], 1], c='red', s=200, alpha=0.7)
+#Plot target
+plt.scatter(test[0,0], test[0,1], c='green', s=100, alpha=0.7)
+plt.show()
+```
+![image](https://user-images.githubusercontent.com/85028821/221400854-bbe463f3-7e86-45b4-bd6a-1236deb114cf.png)
+
+KNeighborsClassifier
+```
+from sklearn.neighbors import KNeighborsClassifier
+#from sklearn.metrics import classification_report
+knn = KNeighborsClassifier(n_neighbors = 5)
+knn.fit(dataset[:, :2], dataset[:,2])
+answer = knn.predict(test)
+print(answer)
+```
+> [1.]
