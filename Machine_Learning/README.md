@@ -469,7 +469,7 @@ print(answer)
 - **Iterative Dichotomiser 3 (ID3)** : use information gain (entropy)
 
 ### Issue: Overfitting
-### Solution
+**Solution**
 - Limit the number of iterations of ID3
 - Pruning
 - Random forests 
