@@ -494,3 +494,14 @@ Image(graph.create_png())
 ![image](https://user-images.githubusercontent.com/85028821/221401097-e6a7003b-6984-46ef-9ed6-a9e36a8302fe.png)
 
 ## 4.Neural Network
+### NN model layer
+- Input layer
+- Hidden layer: Linear operation + Activation function (eg. sigmoid)
+- Output layer
+### NN trainable parameter
+- Weight
+- Bias
+### Gradient computation
+**Backpropagation algorithm**
+
+Example tensorflow code can see in https://github.com/macgyver121/Project-Predict-car-prices-with-ML-and-MLP
