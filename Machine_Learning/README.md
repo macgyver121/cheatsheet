@@ -129,7 +129,8 @@ plt.show()
 - Reduce number of features
 - Regularization
 
-## Regularization: Additional term of Lambda in the cost function 
+## Regularization
+### Additional term of Lambda in the cost function 
 - Ridge regression: reduce parameters close to zero (but not zero)
 - Lasso regression: reduce the number of features
 - Elastic Net: mix of both Ridge and Lasso
