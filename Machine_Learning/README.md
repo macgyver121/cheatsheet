@@ -408,3 +408,12 @@ pyplot.show()
 ```
 ![image](https://user-images.githubusercontent.com/85028821/221399786-ace82fad-ace3-440c-8b5c-c3e9fc873583.png)
 
+## 2.K-Nearest Neighbors (K-NN)
+Assumption: Similar Inputs have similar outputs
+
+To classify a new input vector x, examine the k-closet trainging data points to x and assign the object to the most frequently occurring class
+
+**Issues and Remedies**
+- Ties
+-- for binary classification: choose K odd
+-- for multi-class classification: decrease K until the tie is broken 
