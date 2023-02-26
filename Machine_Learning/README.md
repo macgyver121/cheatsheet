@@ -509,7 +509,10 @@ Example tensorflow code can see in https://github.com/macgyver121/Project-Predic
 ## 5.Support Vector Machine (SVM)
 ### Definition
 The object is to find the maximum-margin hyperplane.The distance between the hyperplane and the nearest point x from either group is maximized.
+
 **Cost function**: Hinge loss
+
+create SVM function from scratch
 ```
 #Credit: https://github.com/python-engineer/MLfromscratch
 import numpy as np 
@@ -592,6 +595,7 @@ class SVM:
 
         plt.show()
 ```
+use SVM from scratch and SVM from sklearn 
 ```
 import numpy as np
 from sklearn import datasets
