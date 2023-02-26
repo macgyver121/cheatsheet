@@ -219,8 +219,192 @@ print('predict_prob:',clf.predict_proba(X))
 #easy evaluate
 print('score:',clf.score(X, Y))
 ```
-
 ![image](https://user-images.githubusercontent.com/85028821/220159150-07ccdbd1-db8a-4ffe-8027-07ba7db2c554.png)
 
+## Model Evaluation
 
+### Machine learning diagnosis
+- Get more training examples >> Fix overfit (high variance)
+- Try smaller sets of features >> Fix overfit (high variance)
+- Try getting additional features >> Fix underfit (high bias)
+- Try adding polynomial features >> Fix underfit (high bias)
+- Try decreasing λ >> Fix underfit (high bias)
+- Try increasing λ >> Fix overfit (high variance)
+
+### Methods to create model
+- **Hold-out**
+```
+import numpy as np
+from numpy import random
+from sklearn.model_selection import train_test_split
+import warnings
+warnings.filterwarnings('ignore')
+from sklearn.metrics import mean_squared_error
+np.set_printoptions(formatter={'float': lambda x: "{0:0.2f}".format(x)})
+
+X, y = np.arange(10).reshape((5, 2)),random.rand(5) # 4 columns, 100 rows, 80:20%
+print(X)
+print(y)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+print('X train ', X_train)
+print('y train ', y_train)
+print('X test ', X_test)
+print('y test ', y_test)
+
+from sklearn.metrics import r2_score
+from sklearn.linear_model import LinearRegression
+lr = LinearRegression()
+model = lr.fit(X_train,y_train)
+y_pred = model.predict(X_test)
+print('y_pred ', y_pred)
+print(r2_score(y_test, y_pred))
+print(mean_squared_error(y_test,y_pred))
+```
+- **Cross validation** (Grid search CV)
+
+```
+from sklearn import datasets
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+iris = datasets.load_iris()
+
+# Create regularization penalty space
+penalty = ['l1', 'l2']
+
+# Create regularization hyperparameter space
+C = np.logspace(0, 4, 10)
+print(C)
+
+# Create hyperparameter options
+hyperparameters = dict(C=C, penalty=penalty)
+
+clf = LogisticRegression()
+model = GridSearchCV(clf, hyperparameters, cv=5, verbose=0)
+best_model = model.fit(iris.data, iris.target)
+
+# View best hyperparameters
+print('Best Penalty:', best_model.best_estimator_.get_params()['penalty'])
+print('Best C:', best_model.best_estimator_.get_params()['C'])
+```
+
+### Error metrics
+- Confusion Matrix
+- Precision, Recell, Accuracy
+- F1-score
+- ROC, AUC
+
+**Confusion Matrix**
+```
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.model_selection import train_test_split
+
+X, y = make_classification(random_state=0)
+print('X = ',X)
+print('y = ',y)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0) #75:25
+
+clf = LogisticRegression()
+
+clf.fit(X_train, y_train)
+
+plot_confusion_matrix(clf, X_test, y_test)
+
+plt.show()
+
+## [TN,FP]
+## [FN,TP]
+```
+![image](https://user-images.githubusercontent.com/85028821/221399726-3077f36f-4d8d-4e85-b416-0d727421af18.png)
+
+```
+from sklearn.metrics import confusion_matrix
+y_true = [0, 0, 0, 1, 1, 1, 1, 1, 0, 1]
+y_pred = [0, 0, 0, 1, 0, 1, 0, 1, 1, 0]
+
+test = confusion_matrix(y_true, y_pred)
+print(test) # 2D
+tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel() ## มันจะเรียง output แบบนี้ / ravel ทำจาก 2 มิติให้กลายเป็นเรียง 1 มิติ
+print("tp=",tp," fp=",fp)
+print("fn=",fn," tn=", tn)
+
+from sklearn import metrics
+from sklearn.metrics import accuracy_score
+precision = metrics.precision_score(y_true, y_pred)
+recall = metrics.recall_score(y_true, y_pred)
+f1 = metrics.f1_score(y_true, y_pred)
+accuracy = accuracy_score(y_true, y_pred)
+print("accuracy = ",accuracy )
+print("precision = ",precision)
+print("recall = ", recall)
+print("f1 = ", f1)
+
+print('******************')
+
+target_names = ['class 0', 'class 1']  ## ปกติจะดูที่ class 1 บอกว่ามี 1 อยู่ 6 ตัว (class 0 เหมือนเรามอง 0 เป็นตัวหลักแทน มันจะเหมือน invert กับclass 1 แต่ถ้าเหมือนที่เราเรียนมันจะดูใน class1)
+print(metrics.classification_report(y_true, y_pred, target_names=target_names))
+
+## macro คือเอาบวกกันหาร 2 แต่ w avg จะมีการเอาค่าคูณ support / all support
+```
+![image](https://user-images.githubusercontent.com/85028821/221399748-d60c60af-84df-4415-9c5a-22465f6c34bf.png)
+
+**ROC AUC**
+```
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+from matplotlib import pyplot
+
+# generate 2 class dataset
+X, y = make_classification(n_samples=1000, n_classes=2, random_state=1)
+print(X.shape)
+
+# split into train/test sets
+trainX, testX, trainy, testy = train_test_split(X, y, test_size=0.3, random_state=2)
+
+# generate a no skill prediction (majority class)
+ns_probs = [0 for _ in range(len(testy))]
+
+# fit a model
+model = LogisticRegression()
+model.fit(trainX, trainy)
+
+# predict probabilities
+lr_probs = model.predict_proba(testX)
+
+# keep probabilities for the positive outcome only
+## เวลาค่าที่ออกมามันจะมี 2 column , columnแรกเป็นลบ columnสองเป็นบวก
+lr_probs = lr_probs[:, 1]
+
+# calculate scores
+ns_auc = roc_auc_score(testy, ns_probs)
+lr_auc = roc_auc_score(testy, lr_probs)
+
+# summarize scores
+print('No Skill: ROC AUC=%.3f' % (ns_auc))
+print('Logistic: ROC AUC=%.3f' % (lr_auc))
+
+# calculate roc curves
+ns_fpr, ns_tpr, _ = roc_curve(testy, ns_probs)
+lr_fpr, lr_tpr, _ = roc_curve(testy, lr_probs)
+
+# plot the roc curve for the model
+pyplot.plot(ns_fpr, ns_tpr, linestyle='--', label='No Skill')
+pyplot.plot(lr_fpr, lr_tpr, marker='.', label='Logistic')
+
+# axis labels
+pyplot.xlabel('False Positive Rate')
+pyplot.ylabel('True Positive Rate')
+
+# show the legend
+pyplot.legend()
+
+# show the plot
+pyplot.show()
+```
+![image](https://user-images.githubusercontent.com/85028821/221399786-ace82fad-ace3-440c-8b5c-c3e9fc873583.png)
 
