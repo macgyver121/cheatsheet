@@ -620,3 +620,7 @@ clf2.fit(X,y)
 print("sklearn ",clf2.coef_," ",clf2.intercept_)
 ```
 ![image](https://user-images.githubusercontent.com/85028821/221421288-acecdfa8-8122-462a-9b38-3b7748170a4d.png)
+
+# Clustering
+Unsupervised Learning
+## 1.K-Means
