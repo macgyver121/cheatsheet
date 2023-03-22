@@ -141,3 +141,101 @@ SELECT
 FROM customers;
 ```
 ![image](https://user-images.githubusercontent.com/85028821/212552191-5a2d0242-038e-44ea-9032-4e2c4109bbd8.png)
+
+## Aggregate functions ignore NULL
+```
+-- aggregate functions ignore NULL
+SELECT 
+    AVG(bytes) avg_bytes, 
+    SUM(bytes), 
+    MIN(bytes), 
+    MAX(bytes), 
+    COUNT(bytes)
+from tracks
+```
+![image](https://user-images.githubusercontent.com/85028821/226843589-acc2372b-8259-45a3-bbd3-89304171e67f.png)
+
+## Group by With 2 columns
+```
+SELECT
+  country,
+  state,
+  COUNT(*)
+from customers
+group by country, state
+```
+![image](https://user-images.githubusercontent.com/85028821/226845103-78801ad8-41c2-4517-b219-fd249ff0faec.png)
+
+## Having
+It uses for filter data after group by
+```
+SELECT 
+  genres.name,
+  COUNT(*) n_songs
+from genres
+join tracks on genres.genreid = tracks.genreid
+group by genres.name
+having n_songs >= 300 ;
+```
+![image](https://user-images.githubusercontent.com/85028821/226845714-c5c96111-cfd0-4665-8d7b-93ee086773ac.png)
+
+## Having vs where
+To exclude Rack genre after group by using Having
+```
+-- use having
+SELECT 
+  genres.name,
+  COUNT(*) n_songs
+from genres
+join tracks on genres.genreid = tracks.genreid
+group by genres.name
+having genres.name <> 'Rock' -- not include Rock genre
+Order by n_songs DESC  --descending order
+Limit 5 ;
+```
+To exclude Rack genre before group by using Where
+```
+-- use where
+SELECT 
+    genres.name,
+    COUNT(*) n_songs
+from genres
+join tracks on genres.genreid = tracks.genreid
+where genres.name <> 'Rock' -- not include Rock genre
+group by genres.name
+Order by n_songs DESC  --descending order
+Limit 5 ;
+```
+![image](https://user-images.githubusercontent.com/85028821/226846803-e442de25-8c83-4b39-adbe-de54420a5160.png)
+
+use both where and having
+```
+SELECT 
+    genres.name,
+    COUNT(*) n_songs
+FROM genres
+JOIN tracks on genres.genreid = tracks.genreid
+WHERE genres.name <> 'Rock' -- not include Rock genre
+GROUP BY genres.name
+HAVING n_songs < 400
+ORDER BY n_songs DESC  --descending order
+LIMIT 5 ;
+```
+
+## Aggregation function with Group by
+```
+SELECT
+  genres.name,
+  COUNT(*) n_songs,
+  SUM(tracks.bytes) total_bytes,
+  AVG(tracks.bytes) avg_bytes
+FROM genres 
+JOIN tracks ON genres.GenreId = tracks.GenreId
+WHERE genres.name <> 'Rock' -- not include Rock genre
+GROUP BY genres.name
+HAVING n_songs < 400 -- filter groups after group by
+ORDER BY n_songs DESC 
+LIMIT 5; -- descending order
+```
+![image](https://user-images.githubusercontent.com/85028821/226847374-91549cee-62ba-4549-a844-a66e5fe83862.png)
+
