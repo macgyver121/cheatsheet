@@ -97,6 +97,41 @@ SELECT DISTINCT artistName from (
   WHERE A.name LIKE 'L%' 
 ) ;
 ```
+select only customers in USA and Canada
+```
+-- subquery โดยจะ run inner query ก่อน outer query
+SELECT firstname, lastname, email FROM (
+	SELECT * FROM customers where country IN ('USA', 'Canada')
+  );
+```
+![image](https://user-images.githubusercontent.com/85028821/226847902-49346ca6-f132-4a9f-9176-d212ee073b67.png)
+
+subqueries with pipes
+```
+SELECT firstname ||' '|| lastname || 'uses email:' || email || 'for contact' || '.' AS statement
+FROM (
+	SELECT * FROM customers where country IN ('USA', 'Canada')
+  );
+```
+![image](https://user-images.githubusercontent.com/85028821/226848363-1a0cb9a7-c942-4561-a21b-65ec2212e6b2.png)
+
+The benefit of subqueries is that it runs faster because it queries data from the inner before.
+```
+-- subqueries (ข้อดีของการ filter table ข้างใน inner query ก่อนคือจะทำให้ดึงข้อมูลที่จะมา join น้อยลง จะทำให้ run ได้เร็วขึ้น
+SELECT country, SUM(total) FROM customers 
+JOIN (
+      SELECT 
+      customerid, 
+      invoicedate, 
+      total 
+      FROM invoices
+      WHERE STRFTIME('%Y', invoicedate) = '2010'
+  ) AS sub
+ON customers.customerid = sub.customerid
+WHERE country IN ('USA', 'Canada', 'United Kingdom')
+GROUP BY country;
+```
+![image](https://user-images.githubusercontent.com/85028821/226849768-84f783eb-462b-4fdf-9c46-d4b6455ee6c5.png)
 
 ## Filter NULL
 filter all row that is not NULL in company column
@@ -238,4 +273,17 @@ ORDER BY n_songs DESC
 LIMIT 5; -- descending order
 ```
 ![image](https://user-images.githubusercontent.com/85028821/226847374-91549cee-62ba-4549-a844-a66e5fe83862.png)
+
+## NTILE
+Create a segment from column
+```
+-- create segment from bytes
+SELECT 
+     trackid, 
+     name, 
+     bytes,
+     NTILE(10) OVER(ORDER BY bytes) AS bytes_segment
+FROM tracks
+```
+![image](https://user-images.githubusercontent.com/85028821/226850658-9cf9ddd6-4e58-4b6f-bb5a-4f0e7f3fb075.png)
 
