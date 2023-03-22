@@ -299,3 +299,64 @@ SELECT * FROM my_view
 ```
 ![image](https://user-images.githubusercontent.com/85028821/226851587-6915503f-e4d1-4279-9e91-4a0ab9d3b726.png)
 
+## Upper & Substr
+Upper for change string to upper test, Substr for bring string (column, start index, no.)
+```
+SELECT 
+    firstname, 
+    lastname,
+    firstname || ' ' || lastname  AS fullName,
+    UPPER(firstname) || SUBSTR(lastname, 1, 1) ||  '@fullstack.com' AS email 
+FROM customers;
+```
+![image](https://user-images.githubusercontent.com/85028821/226856099-06a8d067-08a4-4248-bbfe-21543a0c9a2f.png)
+
+## Round
+for round decimal numbers or can set the number of decimal points
+```
+SELECT 
+    name, 
+    ROUND(milliseconds/ 60000.0, 2)    AS minutes, -- value function 
+    ROUND(bytes/ (1024*1024.0) , 4)    AS mb
+FROM tracks;
+```
+![image](https://user-images.githubusercontent.com/85028821/226857316-b6ae2d61-a5ff-42d7-aaae-cd706ad94d7e.png)
+
+## CAST
+cast used to convert data type in SQL, Change only query Not change in Database
+```
+SELECT 
+  CAST('100' AS INT), 
+  TYPEOF(CAST('100' AS INT)), 
+  CAST(100 AS TEXT),
+  TYPEOF(CAST('100' AS TEXT)) 
+```
+![image](https://user-images.githubusercontent.com/85028821/226859654-0a7325a3-1bdf-4fd4-a3d1-d20a22d89a7b.png)
+
+## STRFTIME
+work with date-time
+```
+-- date format YYYY-MM-DD 
+SELECT 
+    invoicedate,
+    STRFTIME('%Y', invoicedate) AS YEAR,
+    STRFTIME('%m', invoicedate) AS month,
+    STRFTIME('%d', invoicedate) AS day,
+    STRFTIME('%Y-%m', invoicedate) AS monthID
+from invoices 
+WHERE monthID = '2013-06' ;
+```
+![image](https://user-images.githubusercontent.com/85028821/226858496-d25e7be0-2627-4076-b86a-69cb20b72518.png)
+
+use STRFTIME with CAST
+```
+-- format date column (actually it's text in SQLite)
+SELECT 
+  invoicedate, 
+  CAST(STRFTIME('%Y', invoicedate) AS INT)  AS year,
+  CAST(STRFTIME('%m', invoicedate) AS INT)  AS month,
+  CAST(STRFTIME('%d', invoicedate) AS INT)  AS day,
+  STRFTIME('%Y-%m', invoicedate)   AS monthID
+FROM invoices WHERE year = 2013 AND month = 9;
+```
+![image](https://user-images.githubusercontent.com/85028821/226860507-5751de79-47e4-4657-9210-63f592da6361.png)
