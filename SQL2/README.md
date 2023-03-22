@@ -287,3 +287,15 @@ FROM tracks
 ```
 ![image](https://user-images.githubusercontent.com/85028821/226850658-9cf9ddd6-4e58-4b6f-bb5a-4f0e7f3fb075.png)
 
+## View
+Create temporary table, Do not interfere with the Database
+```
+CREATE VIEW my_veiw
+AS
+select firstname, lastname, company
+from customers
+
+SELECT * FROM my_view
+```
+![image](https://user-images.githubusercontent.com/85028821/226851587-6915503f-e4d1-4279-9e91-4a0ab9d3b726.png)
+
