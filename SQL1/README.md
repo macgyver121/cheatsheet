@@ -362,7 +362,7 @@ AND A.name LIKE 'C%' ;
 ```
 ![image](https://user-images.githubusercontent.com/85028821/211560027-f16752ec-31e3-42c8-9e99-25e6daa05f1a.png)
 
-## Join tale with Count
+## Join table with Count
 ** Join or Inner join is default join for SQL "most popular join in Data analyst" but right join and full outer join does not have in SQLite
 Join table with inner join and count Aerosmith's song
 ```
